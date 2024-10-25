@@ -17,6 +17,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server' , 'views'));
 app.set('view engine', 'ejs');
+app.set('layout', 'main'); // Menetapkan main.ejs sebagai layout default
 
 app.use(logger('dev'));
 app.use(express.json());
