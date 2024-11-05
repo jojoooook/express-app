@@ -1,39 +1,25 @@
-const index = (req,res) => {
-    const prodi = [
-        {
-            prodi: "Sistem Informasi",
-            fakultas: "FIKR",
-            singkatan: "SI"
-        },
-        {
-            prodi: "Informatika",
-            fakultas: "FIKR",
-            singkatan: "IF"
-        },
-        {
-            prodi: "Teknik Elektro",
-            fakultas: "FIKR",
-            singkatan: "TE"
-        },
-        {
-            prodi: "Manajemen Informatika",
-            fakultas: "FIKR",
-            singkatan: "MI"
-        },
-        {
-            prodi: "Manajemen",
-            fakultas: "FEB",
-            singkatan: "MJ"
-        },
-        {
-            prodi: "Akutansi",
-            fakultas: " FEB",
-            singkatan: "AK"
-        },
+// Mengimpor axios untuk melakukan HTTP request
+const axios = require("axios");
 
-    ]
+const index = async (req, res) => {
+    try {
+        // Mendapatkan data prodi dari API external
+        const response = await axios.get("https://express-app-smoky.vercel.app/api/prodi");
 
-    res.render('prodi' , {title : "Prodi", prodi, layout : 'main'});
-}
+        // Data prodi dari API
+        const prodi = response.data;
 
-module.exports = {index}
+        // Render halaman 'prodi' dengan data yang diperoleh dari API
+        res.render("prodi", {
+            title: "Halaman Program Studi",
+            prodi: prodi,
+            layout: "main",
+        });
+    } catch (error) {
+        // Menangani kesalahan saat mengambil data dari API
+        console.error(error.message);
+        res.status(500).send("Gagal mendapatkan data program studi dari API");
+    }
+};
+
+module.exports = { index };
