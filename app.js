@@ -6,12 +6,16 @@ var logger = require('morgan');
 const expressLayouts = require("express-ejs-layouts"); // impor modul express-ejs-layouts
 const connectDB = require("./app_api/models/db")
 
+
 var indexRouter = require('./app_server/routes/index');
 const fakultasRouter = require('./app_server/routes/fakultas')
 var usersRouter = require('./app_server/routes/users');
 var prodiRouter = require('./app_server/routes/prodi');
 const fakultasRouterApi = require('./app_api/routes/fakultas');
 const prodiRouterApi = require('./app_api/routes/prodi');
+const authRouterApi = require('./app_api/routes/auth');
+
+require('dotenv').config();
 
 var app = express();
 
@@ -27,6 +31,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
 
+
+
 app.use('/', indexRouter);
 app.use('/fakultas', fakultasRouter);
 app.use('/prodi', prodiRouter);
@@ -34,6 +40,7 @@ app.use('/users', usersRouter);
 // API
 app.use('/api/fakultas', fakultasRouterApi);
 app.use('/api/prodi', prodiRouterApi);
+app.use('/api/auth', authRouterApi);
 
 // Connect to MongoDB
 connectDB();
