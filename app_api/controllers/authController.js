@@ -28,28 +28,27 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { email, password } = req.body; // Mendapatkan email dan password dari body permintaan
-    
+
     try {
-        const user = await User.findOne({email}); // Mencari pengguna berdasarkan email
+        const user = await User.findOne({ email }); // Mencari pengguna berdasarkan email
         if (!user) {
             // Jika pengguna tidak ditemukan
-            return res.status(400).json({message: "Invalid email or password" }); // Kirim pesan error
+            return res.status(400).json({ message: "Invalid email or password"}) //
         }
-        
-        const isMatch = await bcrypt.compare(password, user.password); // Menbandingkan password 
-        if (isMatch) {
+
+        const isMatch = await bcrypt.compare (password, user.password);
+        if (!isMatch) {
             // Jika password tidak cocok
-            return res.status(400).json({message: "Invalid email or password" }); // Kirim pesan error 
+            return res.status(400).json({ message: "Invalid email or password"}) // kirim pesan error
         }
-        
-        const payload = {userId: user.id, role: user.role}; // Membuat payload token dengan ID dan role pengguna
+
+        const payload = { userId: user.id, role: user.role }; // Membuat payload untuk token
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
-        });
-        
-        res.json({token}); // Mengirim token sebagai respons
+        }); // Membuat JWT token
+
+        res.json ({ token }); // Mengirim token sebagai respons
     } catch (error) {
-    
-    res.status(500).json({message: error.message }); // Kirim pesan error jika ada masalah server
+        res.status(500).json({ message: error.message}) // Mengirim pesan error jika ada masalah server
     }
 };
