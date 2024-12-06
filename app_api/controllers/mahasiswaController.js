@@ -8,11 +8,6 @@ const fs = require("fs");
 exports.createMahasiswa = async (req, res) => {
   const { npm, nama, prodi_id, jenis_kelamin, asal_sekolah } = req.body; // Destructurisasi data dari body request
 
-  if (!req.file) {
-    // Validasi jika file foto tidak ada
-    return res.status(400).json({ message: "File foto is required" });
-  }
-
   try {
     const prodi = await Prodi.findById(prodi_id); // Mencari Prodi berdasarkan ID
     if (!prodi) return res.status(404).json({ message: "Prodi not found" }); // Jika Prodi tidak ditemukan
@@ -24,7 +19,7 @@ exports.createMahasiswa = async (req, res) => {
       prodi_id,
       jenis_kelamin,
       asal_sekolah,
-      foto: req.file ? req.file.path : null, // Simpan path file jika ada
+      foto: req.file ? req.file.path : null, // Simpan path file jika ada, jika tidak null
     });
 
     await mahasiswa.save(); // Menyimpan data mahasiswa ke database
@@ -47,10 +42,7 @@ exports.getAllMahasiswa = async (req, res) => {
 // Fungsi untuk mendapatkan data mahasiswa berdasarkan ID
 exports.getMahasiswaById = async (req, res) => {
   try {
-    const mahasiswa = await Mahasiswa.findById(req.params.id).populate(
-      "prodi_id",
-      "nama"
-    ); // Mengambil data mahasiswa berdasarkan ID dan relasi Prodi
+    const mahasiswa = await Mahasiswa.findById(req.params.id).populate("prodi_id", "nama"); // Mengambil data mahasiswa berdasarkan ID dan relasi Prodi
     if (!mahasiswa) {
       return res.status(404).json({ message: "Mahasiswa not found" }); // Jika mahasiswa tidak ditemukan
     }
