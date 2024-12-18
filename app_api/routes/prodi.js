@@ -4,7 +4,8 @@ const express = require("express");
 const router = express.Router();
 // Mengimpor Controller prodi untuk menangani logika bisnis
 const prodiController = require("../controllers/prodiController");
-
+const authMiddleware = require("../middleware/authMiddleware")
+const roleMiddleware = require("../middleware/roleMiddleware")
 // Definisi rute untuk fakultas
 // Mengatur rute GET untuk mendapatkan semua data fakultas
 router.get("/", prodiController.getAllProdi);
